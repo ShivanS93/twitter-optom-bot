@@ -1,12 +1,50 @@
-# The Optom Bot - A Twitter Bot
+# OptomBot - A Twitter Bot
 *Made by Shivan Sivakumaran*
+
 Started: 16th December 2020
 
 ## Introduction
 
-This is a fun little project for me to get acquainted with twitter API and using `tweepy`.
+This is a fun little project for me to get acquainted with twitter API through use of `tweepy`. In addition to this, I gain experience in deployment using Docker and Amazon EC2 instance.
 
 The objective is to create a bot that favourites and retweets Optometry related posts on twitter.
+
+More information about this will be provided in a structured blog post.
+
+## Structure of files
+
+TwitterOptomBot/
+|
+|--- bots/
+|	|--- config.py
+|	|--- fav_and_retweet.py
+|	|--- .env**
+|--- requirements.txt
+|--- Dockerfile
+|--- README.MD
+|
+
+** .env files needs to be created
+
+## .env file
+
+This file is used to contain the environment variables, which will house the API keys and tokens. The file is structured as follows:
+```
+APIkey=<API Key>
+APISecretKey=<API Secret Key>
+BearerToken=<Bearer Token>
+AccessToken=<Access Token>
+AccessTokenSecret=<Access Token Secret>
+```
+## requirements.txt
+
+This contains the packages necessary for this project. Ensure you create a virtual environment. Then, install the packages from the `requirements.txt`. There an assumption that we are using Python 3.7+.
+
+```
+python3 -m virtualenv <name of virtual environment>
+source <name of virtual environment>/bin/acivate
+pip3 -r requirements.txt
+```
 
 ## Link to the bot
 
