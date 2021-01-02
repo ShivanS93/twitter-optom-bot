@@ -13,6 +13,7 @@ More information about this will be provided in a structured blog post.
 
 ## Structure of files
 
+```
 TwitterOptomBot/
 |
 |--- bots/
@@ -23,7 +24,7 @@ TwitterOptomBot/
 |--- Dockerfile
 |--- README.MD
 |
-
+```
 ** .env files needs to be created
 
 ## .env file
