@@ -13,10 +13,10 @@ The objective is to create a bot that favourites and retweets Optometry related 
 
 # TO-DOs
 
--[] Add more hashtags
--[] Prevent retweeting the same retweet - author silencing?
--[] Learn how to redeploy on docker and create testing ability
--[] Add content from Youtube? 
+- [ ] Add more hashtags
+- [ ] Prevent retweeting the same retweet - author silencing?
+- [ ] Learn how to redeploy on docker and create testing ability
+- [ ] Add content from Youtube? 
 
 ## Structure of files
 
