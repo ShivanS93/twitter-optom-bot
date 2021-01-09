@@ -9,7 +9,14 @@ This is a fun little project for me to get acquainted with twitter API through u
 
 The objective is to create a bot that favourites and retweets Optometry related posts on twitter.
 
-More information about this will be provided in a structured blog post.
+[Here is a blog post related to motivation and inception of the bot](https://shivansivakumaran.com/coding/how-i-created-a-twitter-bot-to-help-my-career-as-an-optometrist/).
+
+# TO-DOs
+
+-[] Add more hashtags
+-[] Prevent retweeting the same retweet - author silencing?
+-[] Learn how to redeploy on docker and create testing ability
+-[] Add content from Youtube? 
 
 ## Structure of files
 
