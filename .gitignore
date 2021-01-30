@@ -1,0 +1,5 @@
+.env
+venv/
+/dev/
+*__pycache__/
+fav-retweet-bot.tar.gz

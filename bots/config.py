@@ -2,11 +2,11 @@
 # this script is used to authenticate the python bot with @OptomBot
 # credentials are saved to a .env file and used by the script as environment variables
 
-
 import tweepy
 import os
 import logging
 from dotenv import load_dotenv
+
 
 logger = logging.getLogger()
 
@@ -28,3 +28,24 @@ def create_api():
         raise e
     logger.info('API created')
     return api
+
+def hashtags():
+    # Max. is two hashtags, but keep these hashtags as may be useful
+    # hashtags = [ 
+    #     '#optometry',
+    #     '#ophthalmology',
+    #     '#glaucoma',
+    #     '#optometrist',
+    #     '#maculadegeneration',
+    #     '#diabeticretinopathy',
+    #     '#keratoconnus',
+    #     '#cataract',
+    #     '#myopia',
+    #     '#dryeye',
+    #     '#retina',
+    #     ] 
+    hashtags = [
+           '#optometry',
+           '#ophthalmology',
+           ]
+    return hashtags
