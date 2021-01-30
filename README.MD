@@ -14,9 +14,11 @@ The objective is to create a bot that favourites and retweets Optometry related 
 # TO-DOs
 
 - [X] Add more hashtags - optometry and ophthalmology (can only have two hashtags)
-- [ ] Prevent retweeting the same retweet - author silencing?
-- [ ] Learn how to redeploy on docker and create testing ability
-- [ ] Add content from Youtube? 
+- [X] Prevent retweeting the same retweet - author silencing?
+- [ ] ~~Learn how to redeploy on docker and create testing ability~~
+- [ ] ~~Add content from Youtube~~
+- [ ] DM status
+- [ ] Most commented / liked post of the month/week?
 
 ## Structure of files
 
