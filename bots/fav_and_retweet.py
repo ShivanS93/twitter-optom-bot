@@ -1,55 +1,116 @@
-#!/usr/bin/env python3
-# TheOptomBot/bots/fav_and_retweet.py
-# the aim of this script is to fav and retweet
-# posts with the hashtag contained in the the config.py file
-
-import tweepy
 import logging
-from config import create_api
-from config import hashtags
-import database_connector as dc
-import json
+import os
 
+import sentry_sdk
+import tweepy
+
+# for logging errors
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
-class FavRetweetListener(tweepy.StreamListener):
-    def __init__(self, api):
+SENTRY_LINK = os.getenv("SENTRY_LINK")
+sentry_sdk.init(SENTRY_LINK, traces_sample_rate=1.0)
+
+# Authentication
+CONSUMER_KEY = os.getenv("ConsumerKey")
+CONSUMER_SECRET_KEY = os.getenv("ConsumerSecretKey")
+ACCESS_TOKEN = os.getenv("AccessToken")
+ACCESS_TOKEN_SECRET = os.getenv("AccessTokenSecret")
+
+HASHTAGS = [
+    "#optometry",
+    "#ophthalmology",
+    # "#glaucoma",
+    "#optometrist",
+    # "#maculadegeneration",
+    # "#diabeticretinopathy",
+    # "#keratoconnus",
+    # "#cataract",
+    # "#myopia",
+    # "#dryeye",
+    # "#retina",
+]
+
+
+def create_api(
+    CONSUMER_KEY=CONSUMER_KEY,
+    CONSUMER_SECRET_KEY=CONSUMER_SECRET_KEY,
+    ACCESS_TOKEN=ACCESS_TOKEN,
+    ACCESS_TOKEN_SECRET=ACCESS_TOKEN_SECRET,
+):
+    """
+    Authentication for the Twitter API
+    Credentials are based on @optombot account
+    Instructions on how to set up API authentication keys here:
+        - https://developer.twitter.com/
+    """
+
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET_KEY)
+    auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+    api = tweepy.API(auth, wait_on_rate_limit=True)
+
+    # checking if API is verfied
+    try:
+        api.verify_credentials()
+    except Exception as e:
+        logger.error("Error in authenticating API")
+        logger.error(f"Message: {e}", exc_info=True)
+        raise e
+    logger.info("API created and verfied")
+    return api
+
+
+class FavRetweetListener(tweepy.Stream):
+    """This initiaises the class for the bot, including custom functions
+
+    Inherits from the tweepy's Stream class
+        - https://docs.tweepy.org/en/stable/stream.html
+
+    Args:
+        api (tweepy.API): This is the authenticated user object (aka bot)
+        consumer_key (str): inherited, the consumer key
+        consumer_secret (str): inherited, the consumer secret
+        access_token (str): inherited, the access token
+        access_token_secret (str): inherited, the access token secret
+    """
+
+    def __init__(self, api: tweepy.API, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.api = api
-        self.me = api.me()
-      
+        self.me = api.verify_credentials().id
+
+    def on_connect(self):
+        logger.info("Connected")
+
     def on_status(self, tweet):
-        logger.info('Processing tweet id %s' % tweet.id)
-        if tweet.in_reply_to_status_id is not None or tweet.user.id == self.me.id:
+        logger.info(f"Processing tweet id: {tweet.id}")
+        if tweet.in_reply_to_status_id is not None or tweet.user.id == self.me:
             # ignores replies or author posts
             return
-        if dc.check_tweet(tweet):
-            logger.info('Tweet has already been tweeted')
-            # prevents 'tweet spam'
         if not tweet.favorited:
-            # mark it as liked, as not been done
             try:
-                tweet.favorite()
-            except Exception as e:
-                logger.error('Error on fav', exc_info=True)
+                self.api.create_favorite(tweet.id)
+            except Exception:
+                logger.error("Error on fav", exc_info=True)
         if not tweet.retweeted:
-            # retweet, since we have not retweeted it yet
             try:
-                tweet.retweet()
-                dc.store_tweet(tweet)
-                #print('Tweet to retweet: %s' % tweet.text)
-            except Exception as e:
-                logger.error('Error on fav and retweeted', exc_info=True)
+                self.api.retweet(tweet.id)
+            except Exception:
+                logger.error("Error on fav and retweeted", exc_info=True)
 
     def on_error(self, status):
         logger.error(status)
- 
-def main(keywords):
-    dc.create_db()
-    api = create_api()
-    tweets_listener = FavRetweetListener(api)
-    stream = tweepy.Stream(api.auth, tweets_listener)
-    stream.filter(track=keywords, languages=['en'])
 
-if __name__ == '__main__':
-    main(hashtags())
+
+def create_bot():
+    """
+    Creates the bot
+    """
+    bot = FavRetweetListener(
+        api=create_api(),
+        consumer_key=CONSUMER_KEY,
+        consumer_secret=CONSUMER_SECRET_KEY,
+        access_token=ACCESS_TOKEN,
+        access_token_secret=ACCESS_TOKEN_SECRET,
+    )
+    bot.filter(track=HASHTAGS, languages=["en"])

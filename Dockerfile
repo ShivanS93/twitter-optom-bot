@@ -1,13 +1,16 @@
-FROM python:3.7-alpine
+FROM python:3.8-slim
 
-COPY bots/config.py /bots/
-COPY bots/fav_and_retweet.py /bots/
-COPY bots/.env /bots/
-COPY bots/database_connector.py /bots/
-COPY bots/database.db /bots/
-COPY requirements.txt /tmp
-RUN pip3 install -r /tmp/requirements.txt
+ENV PYTHONDONTWEITEBYTECODE 1
+ENV PYTHONNUNBUFFERED 1
 
-WORKDIR /bots
-CMD ["python3", "fav_and_retweet.py"]
+WORKDIR /code
 
+RUN pip install pipenv
+COPY Pipfile Pipfile.lock /code/
+RUN pipenv install
+
+COPY . /code/
+
+RUN chmod +x ./entrypoint.sh
+
+ENTRYPOINT ["sh", "entrypoint.sh"]
