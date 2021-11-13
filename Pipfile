@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 tweepy = "*"
 sentry-sdk = "*"
+ansible = "*"
 
 [dev-packages]
 pytest = "*"

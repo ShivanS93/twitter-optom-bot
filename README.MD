@@ -1,4 +1,5 @@
 # OptomBot - A Twitter Bot
+[![Build](https://github.com/ShivanS93/twitter-optom-bot/actions/workflows/main.yml/badge.svg)](https://github.com/ShivanS93/twitter-optom-bot/actions/workflows/main.yml)
 *Made by Shivan Sivakumaran*
 
 ## Introduction
