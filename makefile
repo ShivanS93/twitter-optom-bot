@@ -12,6 +12,4 @@ deploy:
 	git add .
 	git commit -am $(DEFAULT_COMMIT_COMMENT)
 	mv .env ansible/.env
-	cd ansible
-	pipenv run ansible-playbook deploy.yml -i hosts -K
-	cd ..
+	pipenv run ansible-playbook ansible/deploy.yml -i ansible/hosts -K
