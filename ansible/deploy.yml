@@ -1,32 +1,33 @@
 ---
 - name: Deploying application...
-- hosts: shivan.xyz
+  hosts: shivan.xyz
   gather_facts: no
-  become: True
+  become: true
   vars:
     app_name: twitter-optom-bot
-    repo_link: https//github.com/shivans93/twitter-optom-bot
+    repo_link: https://github.com/ShivanS93/twitter-optom-bot
     app_port: 8990
     letsencrypt_email: shivan.sivakumaran@gmail.com
 
-- name: Git pull/clone {{ app_name }} repo
-  ansible.builtin.git:
-    repo: "{{ repo_link }}"
-    dest: /home/shivan/{{ app_name }}
-    single_branch: yes
-    version: main
-    update: yes
+  tasks:
+    - name: Git pull/clone {{ app_name }} repo
+      ansible.builtin.git:
+        repo: "{{ repo_link }}"
+        dest: /home/shivan/{{ app_name }}
+        single_branch: yes
+        version: main
+        update: yes
 
-- name: Copy .env file for {{ app_name }} app
-  ansible.builtin.copy:
-    src: .env
-    dest: /home/shivan/{{ app_name }}/.env
-    owner: "shivan"
-    group: "shivan"
-    mode: "0644"
+    - name: Copy .env file for {{ app_name }} app
+      ansible.builtin.copy:
+        src: ./.env
+        dest: /home/shivan/{{ app_name }}/.env
+        owner: "shivan"
+        group: "shivan"
+        mode: "0644"
 
-- name: Build docker image and run
-  shell: >
-    cd /home/shivan/{{ app_name }} &&
-    docker-compose down &&
-    docker-compose up -d --build
+    - name: Build docker image and run
+      shell: >
+        cd /home/shivan/{{ app_name }} &&
+        docker-compose down &&
+        docker-compose up -d --build

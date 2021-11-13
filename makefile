@@ -8,7 +8,10 @@ test:
 
 DEFAULT_COMMIT_COMMENT="updating code"
 deploy:
-	echo "Deploying application"
+	@echo "Deploying application"
 	git add .
 	git commit -am $(DEFAULT_COMMIT_COMMENT)
-	pipenv run ansible-playbook ansible/deploy.yml ansible/hosts -K
+	mv .env ansible/.env
+	cd ansible
+	pipenv run ansible-playbook deploy.yml -i hosts -K
+	cd ..
