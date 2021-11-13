@@ -11,4 +11,4 @@ deploy:
 	echo "Deploying application"
 	git add .
 	git commit -am $(DEFAULT_COMMIT_COMMENT)
-	pipenv run ansible-playbook ansible/deploy.yml hosts -K
+	pipenv run ansible-playbook ansible/deploy.yml ansible/hosts -K
