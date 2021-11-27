@@ -89,10 +89,12 @@ class FavRetweetListener(tweepy.Stream):
             return
         if not tweet.favorited:
             try:
-                self.api.create_favorite(tweet.id)
+                # TODO: Deactivate favoriting for now as cannot check if post has been fav'd
+                # self.api.create_favorite(tweet.id)
+                logger.info("fav not working")
             except Exception:
                 logger.error("Error on fav", exc_info=True)
-        if not tweet.retweeted:
+        if not hasattr(tweet, "retweeted_status"):
             try:
                 self.api.retweet(tweet.id)
             except Exception:
